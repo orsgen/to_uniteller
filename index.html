@@ -1,0 +1,33 @@
+<!-- Main page of script for showing usage of php-class ComplexMath()-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calc complex numbers</title>
+</head>
+<body>
+    <h1>Calculator of complex numbers</h1>
+    <script src="index.js"></script>
+    <form action="index.php">
+        <input type="number" step="any" size="8" id="x1">
+            &nbsp;+&nbsp;
+        <input type="number" step="any" size="8" id="y1">
+          &nbsp;<b>i</b>&nbsp;&nbsp;
+            <select style="font-weight: bold; font-size: 1.5em" name="op" id="ops" onchange="choiced();">
+            <option selected disabled>+-*/</option>
+            <option value="sum">+</option>
+            <option value="diff">-</option>
+            <option value="mult">*</option>
+            <option value="div">/</option>
+            </select>&nbsp;&nbsp;
+        <input type="number" step="any" size="8" id="x2">
+            &nbsp;+&nbsp;
+        <input type="number" step="any" size="8" id="y2">
+          &nbsp;<b>i</b>&nbsp;
+          <b style="font-size: 1.5em">=</b>
+          &nbsp;<b id="putres"> </b>
+    </form>
+</body>
+</html>
