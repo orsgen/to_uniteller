@@ -37,13 +37,13 @@ class Complex {
         elseif(!in_array($nums['op'], $this->Operations))
             $this->ErrorList[] = 1;
 
-        if(!strlen($nums['x1'])&& !strlen($nums['y1']))
+        if((!array_key_exists('x1', $nums)||!strlen($nums['x1'])) && (!array_key_exists('y1', $nums)||!strlen($nums['y1'])))
             $this->ErrorList[] = 2;
         elseif(!is_numeric($nums['x1'])&&!empty($nums['x1']) || !is_numeric($nums['y1'])&&!empty($nums['y1']))
             $this->ErrorList[] = 4;
 
-        if(!strlen($nums['x2'])&& !strlen($nums['y2']))
-                $this->ErrorList[] = 3;
+        if((!array_key_exists('x2', $nums)||!strlen($nums['x2'])) && (!array_key_exists('y2', $nums)||!strlen($nums['y2'])))
+            $this->ErrorList[] = 3;
         elseif(!is_numeric($nums['x2'])&&!empty($nums['x2']) || !is_numeric($nums['y2'])&&!empty($nums['y2']))
             $this->ErrorList[] = 5;
 
