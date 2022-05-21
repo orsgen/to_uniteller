@@ -1,5 +1,6 @@
 
 For test task "To develop php class for math operations about complex numbers and unit-tests":
+
 (1) Classic OOP 
     complexmath.php Class ComplexMath(). Methods: add($a, $b), sub($a, $b), mul($a, $b), div($a, $b), set_scale($a).
     Reqired extension: bcmath 
@@ -8,6 +9,7 @@ For test task "To develop php class for math operations about complex numbers an
         -index.html Starting page for testing this class
         -index.js   js for post ajax query to server and get json result from it
         Tests/complexmathtest.php - set of full-covered tests for class ComplexMath()
+
 Note: 1. As PHP arythmetic operations don't throw exceptions, my class don't validate data too.
     Example of validation for usage can get from use_cm.php
     2. Project haven't css and use very simple html!
@@ -16,6 +18,7 @@ Note: 1. As PHP arythmetic operations don't throw exceptions, my class don't val
     -complex.php class Complex() and example of usage. Class don't create object "complex number" as to demand OOP and only realize some obviously methods for implementation task develop web-"Complex number calculator". In some cases this decision better than classic OOP.
     -index.html The same with (1)
     -index.js   For use it needs to change url for ajax query from "/use_cm.php" to "/complex.php".
+
 Note: So (2) develop by php 5.6, may be php code include some small bugs
 
 Released: index.html            20/05/2022
