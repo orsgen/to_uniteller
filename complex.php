@@ -1,8 +1,13 @@
 <?php
 /**
-complex.php 
-Get ajax query. Validate params. Choice&use method. Return result.
-*/
+ * !!! Required PHP BcMath
+ * Complex numbers arithmetic operations
+ * And it's usage from html+js+ajax page
+ * 
+ * @author Git:@orsgen
+ * @version 1.0.0
+ * @copyright 20.05.2022
+ */
 
 class Complex {
     

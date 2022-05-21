@@ -68,7 +68,7 @@ function choiced() {
 
     if(isvalid(numbers,op)) {
         let request = new XMLHttpRequest();
-        const url="/complex.php";
+        const url="/use_cm.php";   //For use non-OOP class use here "/complex.php"
         let params = "op=" + op;
         for(i=1;i<3;i++)
             params += "&x" + i + "=" + numbers[2*(i-1)]
