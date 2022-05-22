@@ -25,9 +25,9 @@ class ComplexMathTest extends TestCase {
      */
     public function testadd(array $nums, array $exp) {
         
-        $a = $this->complex = new ComplexMath($nums[0],$nums[1]);
-        $b = $this->complex = new ComplexMath($nums[2],$nums[3]);
-        $c = $this->complex->add($a,$b);
+        $a = $this->complex = ComplexMath::create($nums[0],$nums[1]);
+        $b = $this->complex = ComplexMath::create($nums[2],$nums[3]);
+        $c = $this->complex->add($a, $b, $nums[4]);
         $this->assertSame($exp[0], $c->a);
         $this->assertSame($exp[1], $c->b);
     }
@@ -35,10 +35,10 @@ class ComplexMathTest extends TestCase {
     public function addProvider()
     {
         return [
-            [[0, 0, 0, 0], [0.0,0.0]],
-            [[1, 2, 2, 3], [3.0,5.0]],
-            [[1, 0, -1, -1], [0.0,-1.0]],
-            [[250, 13, 0, -25], [250.0,-12.]]
+            [[0, 0, 0, 0, 1], ['0.0','0.0']],
+            [[1, 2, 2, 3, 0], ['3','5']],
+            [[1, 0, -1, -1, 2], ['0.00','-1.00']],
+            [[250, 13, 0, -25, 3], ['250.000','-12.000']]
         ];
     }
 
@@ -48,9 +48,9 @@ class ComplexMathTest extends TestCase {
      */
     public function testsub(array $nums, array $exp) {
         
-        $a = $this->complex = new ComplexMath($nums[0],$nums[1]);
-        $b = $this->complex = new ComplexMath($nums[2],$nums[3]);
-        $c = $this->complex->sub($a,$b);
+        $a = $this->complex = ComplexMath::create($nums[0],$nums[1]);
+        $b = $this->complex = ComplexMath::create($nums[2],$nums[3]);
+        $c = $this->complex->sub($a,$b,$nums[4]);
         $this->assertSame($exp[0], $c->a);
         $this->assertSame($exp[1], $c->b);
     }
@@ -58,10 +58,10 @@ class ComplexMathTest extends TestCase {
     public function subProvider()
     {
         return [
-            [[0, 0, 0, 0], [0.0,0.0]],
-            [[1, 2, 2, 3], [-1.,-1.0]],
-            [[1, 0, -1, -1], [2.0,1.0]],
-            [[250, 13, 0, -25], [250.0,38.]]
+            [[0, 0, 0, 0, 1], ['0.0','0.0']],
+            [[1, 2, 2, 3, 0], ['-1','-1']],
+            [[1, 0, -1, -1, 2], ['2.00','1.00']],
+            [[250, 13, 0, -25, 3], ['250.000','38.000']]
         ];
     }
 
@@ -71,9 +71,9 @@ class ComplexMathTest extends TestCase {
      */
     public function testmul(array $nums, array $exp) {
         
-        $a = $this->complex = new ComplexMath($nums[0],$nums[1]);
-        $b = $this->complex = new ComplexMath($nums[2],$nums[3]);
-        $c = $this->complex->mul($a,$b);
+        $a = $this->complex = ComplexMath::create($nums[0],$nums[1]);
+        $b = $this->complex = ComplexMath::create($nums[2],$nums[3]);
+        $c = $this->complex->mul($a,$b,$nums[4]);
         $this->assertSame($exp[0], $c->a);
         $this->assertSame($exp[1], $c->b);
     }
@@ -81,10 +81,10 @@ class ComplexMathTest extends TestCase {
     public function mulProvider()
     {
         return [
-            [[0, 0, 0, 0], [0.0,0.0]],
-            [[1, 2, 2, 3], [-4.,7.0]],
-            [[1, 0, -1, -1], [-1.0,-1.0]],
-            [[250, 13, 0, -25], [325.0,-6250.]]
+            [[0, 0, 0, 0, 1], ['0.0','0.0']],
+            [[1, 2, 2, 3, 0], ['-4','7']],
+            [[1, 0, -1, -1, 2], ['-1.00','-1.00']],
+            [[250, 13, 0, -25, 3], ['325.000','-6250.000']]
         ];
     }
 
@@ -94,9 +94,9 @@ class ComplexMathTest extends TestCase {
      */
     public function testdiv(array $nums, array $exp) {
         
-        $a = $this->complex = new ComplexMath($nums[0],$nums[1]);
-        $b = $this->complex = new ComplexMath($nums[2],$nums[3]);
-        $c = $this->complex->div($a,$b);
+        $a = $this->complex = ComplexMath::create($nums[0],$nums[1]);
+        $b = $this->complex = ComplexMath::create($nums[2],$nums[3]);
+        $c = $this->complex->div($a,$b,$nums[4]);
         $this->assertSame($exp[0], $c->a);
         $this->assertSame($exp[1], $c->b);
     }
@@ -104,30 +104,9 @@ class ComplexMathTest extends TestCase {
     public function divProvider()
     {
         return [
-            [[1, 2, 2, 3], [0.6153,0.0769]],
-            [[1, 0, -1, -1], [-0.5,0.5]],
-            [[250, 13, 0, -25], [-0.52,10.0]]
-        ];
-    }
-
-    /**
-     * Test for set_scale()
-     * NB! Method must return old value!
-     * @dataProvider set_scaleProvider
-     */
-    public function testset_scale(int $scale, int $exp) {
-        
-        $a = new ComplexMath(0,0,0);
-        $old_scale = $a->set_scale($scale);
-        $this->assertSame($exp, $old_scale);
-    }
-
-    public function set_scaleProvider()
-    {
-        return [
-            [2, 0],
-            [10, 2],
-            [0, 10]
+            [[1, 2, 2, 3, 4], ['0.6153','0.0769']],
+            [[1, 0, -1, -1, 1], ['-0.5','0.5']],
+            [[250, 13, 0, -25, 2], ['-0.52','10.00']]
         ];
     }
 
@@ -136,11 +115,14 @@ class ComplexMathTest extends TestCase {
      */
     public function testFailing__construct()
     {
-        $this->expectExceptionMessage('Cannot assign string to property ComplexMath'::class);
-        $a = new ComplexMath('',1,0);
-        $a = new ComplexMath(1,'',0);
-        $a = new ComplexMath(null,1,0);
-        $a = new ComplexMath(1,null, 0);
+        $a = ComplexMath::create('',1);
+        $this->assertSame(null, $a);
+        $a = ComplexMath::create(1,'');
+        $this->assertSame(null, $a);
+        $a = ComplexMath::create(null,1);
+        $this->assertSame(null, $a);
+        $a = ComplexMath::create(1,null);
+        $this->assertSame(null, $a);
     }
 
     /**
@@ -149,8 +131,8 @@ class ComplexMathTest extends TestCase {
     public function testFailingops__construct()
     {
         $this->expectExceptionMessage('Division by zero'::class);
-        $a = new ComplexMath(1,1);
-        $b = new ComplexMath(0,0);
-        $c = $b->div($a,$b);
+        $a = ComplexMath::create(1,1);
+        $b = ComplexMath::create(0,0);
+        $c = ComplexMath::div($a,$b);
     }
 }

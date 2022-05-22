@@ -9,33 +9,41 @@
  * @copyright 20.05.2022
  */
 
- require_once "complexmath.php";
+require_once "complexmath.php";
 
- $Operations = array("sum", "diff", "mult", "div");
- $ErrorMessages = array(
-     "Операция не указана",
-     "Неизвестная операция над комплексными числами",
-     "Левый операнд пуст",
-     "Правый операнд пуст",
-     "Левый операнд - не комплексное число",
-     "Правый операнд - не комплексное число",
-     "Деление на ноль",
-     "Операция с большими числами - требуется php-библиотека Bcmath"
- );
- $ErrorList = array();
+//Input name of arytmetic operations (it's different from class name methods)
+$Operations = array("sum", "diff", "mult", "div");
 
- /**
-  * Validation of getting params.
-  * Use before class ComplexMath()!
-  * @param  array   $nums Content 5 named values: operator, left operand (a,b), right operand (a,b)
-  */
- function  isvalid(array $nums) {
+//List of input data errors
+// index.js has validation before send data but sometimes may to get troubles without php-validation.
+// It needs because any unhappy changes in js script or html, uncorrect usage of it can give error 
+//    in this php script unvisible for user. 
+$ErrorMessages = array(
+    "Операция не указана",
+    "Неизвестная операция над комплексными числами",
+    "Левый операнд пуст",
+    "Правый операнд пуст",
+    "Левый операнд - не комплексное число",
+    "Правый операнд - не комплексное число",
+    "Деление на ноль"
+);
+
+//For collecting errors and returning full list of errors to Ajax for user 
+$ErrorList = array();
+
+/**
+ * Validation of params got from Ajax
+ * 
+ * @param  array   $nums Content 5 named values: operator, left operand (a,b), right operand (a,b)
+ * @return boolean true for valid data, false for invalid
+ */
+function  isvalid(array $nums) {
     global $Operations, $ErrorList;
 
     //Check name of operation
      if(empty($nums['op']))
          $ErrorList[] = 0;
-     elseif(!in_array($nums['op'], $Operations))
+     elseif(!in_array($nums['op'], $Operations)) 
          $ErrorList[] = 1;
 
      //Check left operand values 
@@ -54,31 +62,32 @@
          return false; 
          
      return true;
- }
+}
 
- /**
-  * Supposition: max value of decimal dimension used by calc user identical expected result dimension.
-  * @param  array $numbers  Include operation named 'op', and operands values
-  */
- function calc_scale(array $numbers) {
+/**
+ * Supposition: max value of decimal dimension used by calc user identical expected result dimension.
+ * @param  array $numbers  Include operation named 'op', and operands values
+ */
+function calc_scale(array $numbers) {
 
-     $dim = 0;
-     foreach($numbers as $i=>$val) {
-         if($i=='op')
-             continue;
-         else {
-             if( ($pos = strpos($val, '.')) !== false)
-                 $dim = max($dim, strlen($val) - $pos - 1);
-             else
-                 $dim = max($dim, 0);
-         }
-     }
-     return $dim;
- }
+    $dim = 0;
+    foreach($numbers as $i=>$val) {
+        if($i=='op')
+            continue;
+        else {
+            if( ($pos = strpos($val, '.')) !== false)
+                $dim = max($dim, strlen($val) - $pos - 1);
+            else
+                $dim = max($dim, 0);
+        }
+    }
+    return $dim;
+}
 
 /*
-For PHP-hosters without php extension BcMath
-Emulation PHP Bcmath
+* Emulation PHP Bcmath
+*
+* For PHP-hosters without php extension BcMath
 */
 if(!extension_loaded("bcmath")) {
 function    bcscale($a) {
@@ -105,17 +114,16 @@ function    bcdiv($a,$b) {
 /*
 ***** Usage of class ComplexMath() ************* 
 */
-$params = $_POST; 
+$params = $_POST;
 
 if( ($valid = isvalid($params))) {
     //Calculate scale of result
     $scale = calc_scale($params);
 
     //Init vars for math operation
-    $a = new ComplexMath($params['x1'], $params['y1'], $scale);
-    $b = new ComplexMath($params['x2'], $params['y2'], $scale);
-    $c = new ComplexMath(0,0);
- 
+    $a = ComplexMath::create($params['x1'], $params['y1']);
+    $b = ComplexMath::create($params['x2'], $params['y2']);
+    
     //Cast operation name from ajax to ComplexMat() names
     switch($params['op']) {
         case 'sum': $math_op = 'add';
@@ -128,10 +136,10 @@ if( ($valid = isvalid($params))) {
     }    
 
     //Execute math operation
-    $c = $c->$math_op($a, $b, $scale); 
+    $c = ComplexMath::$math_op($a, $b, $scale); 
 
     //Prepare result for form as ajax wait json
-    if(($c->a !== null) && ($c->b !== null)) {
+    if(($c instanceof ComplexMath) ) {
         $res = array(array('status'=>1, 'message'=>'Operation complete succesfuly!'), 
                     array('x'=>$c->a, 'y'=>$c->b));
     } else {
@@ -146,7 +154,7 @@ if(!$valid) {
         foreach($ErrorList as $i=>$val) {
             $res[$i+1] = array();
             $res[$i+1]['errno'] = $val;
-            $res[$i+1]['errmsg'] = ErrorMessages[$val];
+            $res[$i+1]['errmsg'] = $ErrorMessages[$val];
         }
 }
 
